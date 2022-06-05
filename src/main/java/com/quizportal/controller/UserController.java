@@ -6,17 +6,22 @@ import com.quizportal.entity.User;
 import com.quizportal.entity.UserRole;
 import com.quizportal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/hello")
     public String hello(){
@@ -27,6 +32,9 @@ public class UserController {
     public User createUser(@RequestBody User user) throws Exception {
 
         System.out.println(user);
+
+        //Bcrypt Password encoder
+        user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
 
         Role role = new Role();
 
